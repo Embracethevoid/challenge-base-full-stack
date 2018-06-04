@@ -69,7 +69,6 @@ function getCustomerInfo(data){
             throw getError(503, 'Mongodb find Error')
         })
         .then((customer) => {
-            console.log(customer);
             if(!customer){                    
                 throw getError(400,"The customer cannot be recongnized!");
             }
@@ -78,7 +77,6 @@ function getCustomerInfo(data){
                 throw getError(400,"Unreachable address!");  
             }
             else{
-                console.log(data);
                 return data;
             }
         })
@@ -101,7 +99,6 @@ function postOrderToAcme(data){
             })
             .then((res) => {
                 var order_id = res.body.order;
-                console.log(order_id);
                 //return order id and all the parameters back
                 return {
                     order_id:order_id,
@@ -112,7 +109,7 @@ function postOrderToAcme(data){
                 } 
             })
             .catch((err) => {
-                throw getError(400,"bad order for acme!");
+                throw getError(400,err.response.text);
             })
             
 }
@@ -139,9 +136,8 @@ function postOrderToRainer(data){
                 })
             })
             .then((res) => {
-                console.log("in rainer"+res.body);
                 return {
-                    order_id:res.body.order,
+                    order_id:res.body.order_id,
                     make:data.make,
                     model:data.model,
                     package:data.package,
@@ -149,7 +145,7 @@ function postOrderToRainer(data){
                 }
             })
             .catch((err) => {
-                throw getError(400,"Bad order for rainer!");
+                throw getError(400,err.response.text);
             })
 
 }
@@ -186,6 +182,10 @@ function saveOrderToFile(data){
     base_url = "http://localhost:8000/orders/";
     let jsonData  = JSON.stringify(data,null,2);
     return new Promise((resolve,reject) => {
+        let dir ="./orders"
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+        }
         fs.writeFile(`./orders/order-${data.order_id}.json`,jsonData,(err) => {
             if(err)
             {
@@ -203,7 +203,7 @@ order.route("/order")
 
     checkParameters(req.body)
     // we require the customer id being stored in db at first
-    // console.log(getCustomerInfo(req.body));
+
     .then((data)=>{return getCustomerInfo(data)})
     .then((data) => {return postOrderToSupplier(data)})
     // postOrderToSupplier(req.body)
@@ -213,7 +213,6 @@ order.route("/order")
         res.json(data)
     })
     .catch((err)=>{
-        console.log(err);
         res.status(err.statusCode).end(err.message);
     })
 });
@@ -281,7 +280,6 @@ order.route("/orders")
         if(!err.statusCode)
         {
             err.statusCode = 500;
-            console.log(err);
         }
         res.status(err.statusCode).end(err.message);
     })
@@ -291,7 +289,6 @@ order.route("/orders")
 
 order.route("/orders/:orderFile")
 .get((req,res,next) => {
-    console.log(req.params.orderFile);
     filename = req.params.orderFile;
     fs.access("./orders/"+filename, fs.constants.F_OK, (err) => {
         if(err){

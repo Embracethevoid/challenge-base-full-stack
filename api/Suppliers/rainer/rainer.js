@@ -17,48 +17,86 @@ function generateOrderId()
     return Math.floor(Math.random()*10000 + 1); // random number between 1- 10000
 }
 rainerRouter = express.Router();
+
+
+function getError(statusCode,message){
+    let error = new Error(message);
+    error.statusCode = statusCode;
+    return error;
+}
+
+function checkStorefront(storefront){
+    return new Promise((resolve,reject) => {
+        if (!storefront){
+            reject(getError(400,"Missing required parameters!"));
+        }
+        else if(storefront !== "ccas-bb9630c04f")
+        {
+            reject(getError(403,"Wrong storefront"));
+        }
+        resolve({nonce_token: "ff6bfd673ab6ae03d8911"})
+    })
+}
 rainerRouter.route("/nonce_token")
 .get((req,res,next) => {
     let storefront = req.query.storefront;
-    if (!storefront){
-        res.status(422).end("Missing required parameters!");
-    }
-    else if(storefront !== "ccas-bb9630c04f")
-    {
-        res.status(403).json({"err":"Wrong StoreFront"}).end();
-    }
-    else{
-        res.json({nonce_token: "ff6bfd673ab6ae03d8911"})
-    }
+    checkStorefront(storefront)
+    .then((data) => {
+        res.json(data)
+    })
+    .catch((err) => {
+        res.status(err.statusCode).end(err.message);
+    })
 });
+
+function checkOrderParameters(data){
+    let token = data.token;
+    let model = data.model;
+    let package = data.package;
+    return new Promise((resolve,reject) => {
+        if(!token || !model || !package)
+        {
+            reject(getError(400,"Missing parameters"));
+        }
+        if(token !== "ff6bfd673ab6ae03d8911")
+        {
+            reject(getError(403,"Wrong token"));
+        }
+        resolve({
+            model:model,
+            package:package
+        })
+    })
+}
+
+function checkModelAndPackage(data)
+{
+    var model = data.model;
+    var package = data.package;
+    return new Promise((resolve,reject) =>{
+        if(["pugetsound","olympic"].indexOf(model)< 0)
+        {
+            throw(getError(400,"Wrong model value!"))
+        }
+        if(["mtn","ltd","14k"].indexOf(package) < 0)
+        {
+            throw(getError(400,"Wrong package value!"))
+        }
+        resolve({"order_id":generateOrderId()});
+        })
+    
+}
 rainerRouter.route("/request_customized_model").
 post((req,res,next) => {
-    console.log(req.body);
-    let token = req.body.token;
-    let model = req.body.model;
-    let package = req.body.package;
-    if(!token || !model || !package)
-    {
-        res.status(422).end("Missing required parameters");
-        return;
-    }
-    if(token !== "ff6bfd673ab6ae03d8911")
-    {
-        res.status(400).end("Wrong Api key!");
-        return;
-    }
-    if(["pugetsound","olympic"].indexOf(model)< 0)
-    {
-        res.status(400).end("Wrong model value!");
-        return;
-    }
-    if(["mtn","ltd","14k"].indexOf(package) < 0)
-    {
-        res.status(400).end("Wrong package value!");
-        return;
-    }
-    orderCount += 1;
-    res.json({"order":generateOrderId()});
+    checkOrderParameters(req.body)
+    .then(data => checkModelAndPackage(data))
+    .then((data) => {
+        res.json(data)
+    })
+    .catch((err) => {
+        res.status(err.statusCode).end(err.message);
+
+    })
 
 })
 app.use("/rainer/v10.0",rainerRouter);

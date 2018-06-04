@@ -188,7 +188,7 @@ describe("Route /order and /orders Test",()=>{
      */
 
     //wrong model value
-    it("wrong model value",(done) =>{
+    it("wrong model value acme",(done) =>{
         chai.request(server)
         .post("/order")
         .send({
@@ -204,7 +204,7 @@ describe("Route /order and /orders Test",()=>{
     })
 
         //wrong package value
-        it("wrong model value",(done) =>{
+        it("wrong package value acme",(done) =>{
             chai.request(server)
             .post("/order")
             .send({
@@ -258,7 +258,7 @@ describe("Route /order and /orders Test",()=>{
     /****************************************
      * the section below is testing orders under make  "rainer"
      */
-    it("wrong model value",(done) =>{
+    it("wrong model value rainer",(done) =>{
         chai.request(server)
         .post("/order")
         .send({
@@ -274,7 +274,7 @@ describe("Route /order and /orders Test",()=>{
     })
 
         //wrong package value
-        it("wrong model value",(done) =>{
+        it("wrong package value rainer",(done) =>{
             chai.request(server)
             .post("/order")
             .send({
