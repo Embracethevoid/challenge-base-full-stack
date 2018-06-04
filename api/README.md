@@ -49,32 +49,33 @@ This folder contains 3 api server.
        - writing file error: 500,"Writing file error". It indicates the server fails to create a file for downloading
   2. Entry point GET /orders
 
-    This path returns all the orders has been made so far.
-    In this path, username and password are required for authentication. The purpose is that this path is only for internal use. To manage this. I created two user in database.
-    they are
-    - {"admin","admin"}
-    - {"Guangyi","firelord"}
-    they should be passed in the header of request as field name of "username" and "password"
+      This path returns all the orders has been made so far.
+      In this path, username and password are required for authentication. The purpose is that this path is only for internal use. To manage this. I created two user in database.
+      they are
+      - {"admin","admin"}
+      - {"Guangyi","firelord"}
+      they should be passed in the header of request as field name of "username" and "password"
 
-    the sample output of this path would be 200,\[
-    {
-        "\_id": "5b146a5e9d6f3713d4b3a713",
-        "order_id": "7940",
-        "make": "rainer",
-        "model": "olympic",
-        "package": "mtn",
-        "customer_id": "1",
-        "\_\_v": 0
-    }
-\]
+      the sample output of this path would be 200,
+      \[
+        \{
+            "\_id": "5b146a5e9d6f3713d4b3a713",
+            "order_id": "7940",
+            "make": "rainer",
+            "model": "olympic",
+            "package": "mtn",
+            "customer_id": "1",
+            "\__v": 0
+        \}
+      \]
 
      error handling of this path is indicated by and error code and error message describing the error. The expected error are listed below
 
-       - 403,"Unknown user!" which means the username is not in database
+     - 403,"Unknown user!" which means the username is not in database
 
-       - 403,"Wrong password", which means the password does not match.
+     - 403,"Wrong password", which means the password does not match.
 
-       - 503,"mongodb find error", would raise if there are errro with mongodb
+     - 503,"mongodb find error", would raise if there are errro with mongodb
 
 2. acme server
 
