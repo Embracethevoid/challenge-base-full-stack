@@ -70,13 +70,13 @@ class PostOrder extends React.Component {
             <ul>Supplier
               <li>
                 <h3>acme</h3> 
-                <h>Supplies model of anvil,wile,roadrunner</h> 
-                <h>Supplies package of std,super,elite</h>
+                <p>Supplies model of anvil,wile,roadrunner</p> 
+                <p>Supplies package of std,super,elite</p>
               </li>
               <li>
                 <h3>rainer</h3> 
-                <h>Supplies model of pugetsound,olympic</h> 
-                <h>Supplies package of mtn,ltd,14k</h>
+                <p>Supplies model of pugetsound,olympic</p> 
+                <p>Supplies package of mtn,ltd,14k</p>
               </li>
             </ul>
             <h3>Type in proper value in each cell and click submit, then the result would be shown below the form.</h3>

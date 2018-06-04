@@ -6,8 +6,7 @@ class Order extends Component
     render()
     {
         return (
-        <div>
-            <h1>This Page returns the orders which have been processd with details</h1>
+
         <li>
             <ul>
                 <li>
@@ -27,7 +26,7 @@ class Order extends Component
                 </li>
             </ul>
         </li>
-        </div>)
+    )
         }
 }
 export default Order

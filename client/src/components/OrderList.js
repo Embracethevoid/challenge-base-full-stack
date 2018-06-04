@@ -20,29 +20,37 @@ class OrderList extends React.Component {
     render() {
       console.log(this.props)
       const { status, error, orders } = this.props;
+      var content;
       if(!status){
-        return <div>It will be ready for a short time</div>
+        content =  <div>It will be ready for a short time</div>
       }
       if (status === "ERROR") {
-        return <div>Error! {error}</div>;
+        content = <div>Error! {error}</div>;
       }
   
       if (status === "LOADING") {
-        return <div>Loading...</div>;
+        content = <div>Loading...</div>;
       }
       if( status === "NOT_STARTED"){
-        return <div>not started yet</div>
+        content = <div>not started yet</div>
+      }
+      if (status === "SUCCESS")
+      {
+        content = <ul>
+        {orders.map(order =>
+            <Order
+              key={order.id}
+              data = {order}
+            />
+        )}
+    </ul>
       }
       return (
         <div>
-        <ul>
-            {orders.map(order =>
-                <Order
-                  key={order.id}
-                  data = {order}
-                />
-            )}
-        </ul>
+            <div>
+            <h1>This Page returns the orders which have been processd with details</h1>
+            {content}
+        </div>
         </div>
       );
     }
