@@ -9,6 +9,12 @@ class Home extends Component {
                     <p>
                         Welcome to the home page, everyone can see this!
                     </p>
+                    <p>
+                        To get orders please visit /getorders
+                    </p>
+                    <p>
+                        To post an order please visti /postorder
+                    </p>
                 </div>
             </div>
         );

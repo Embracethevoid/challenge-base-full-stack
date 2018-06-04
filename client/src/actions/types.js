@@ -1,0 +1,2 @@
+export const GET_ORDERS = "GET_ORDERS";
+export const RECEIVE_ORDERS = "RECEIVE_ORDERS";

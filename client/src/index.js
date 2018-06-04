@@ -9,6 +9,9 @@ import { Route, Switch } from 'react-router-dom';
 import rootReducer from './reducers';
 
 import Home from './components/Home';
+import Sample from './components/Sample';
+import OrderList from './components/OrderList';
+import PostOrder from './components/PostOrder'
 
 import './style/main.scss';
 
@@ -25,7 +28,9 @@ ReactDOM.render(
     <Provider store={store}>
         <Router>
             <Switch>
-                <Route exact path="/" component={Home} />
+                <Route exact path="/" component={Home}/>
+                <Route path="/getorders" component={OrderList}/>
+                <Route path="/postorder" component={PostOrder}/>
             </Switch>
         </Router>
     </Provider>,
